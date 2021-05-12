@@ -76,6 +76,47 @@ test_that("W must be of class 'matrix', 'Matrix', or 'data.frame'", {
 
 
 #####
+# MI.local()
+#####
+test_that("MI.local() works with vector input and returns a data.frame", {
+  x <- fakedataset$x1
+  out <- MI.local(x=x,W=W,alternative="greater")
+  expect_is(out, "data.frame")
+})
+
+test_that("MI.local() stores vector names", {
+  x <- fakedataset$x1
+  names(x) <- paste0("name_",1:length(x))
+  out <- MI.local(x=x,W=W)
+  expect_equal(rownames(out), names(x))
+})
+
+test_that("MI.local() detects NAs and returns an error message", {
+  x <- fakedataset$x1
+  x[1] <- NA
+  expect_error(MI.local(x=x,W=W), "Missing values detected")
+})
+
+test_that("check the permissible attributes for 'alternative'", {
+  x <- fakedataset$x1
+  alternative <- c("greater","lower","two.sided","else")
+  expect <- c(TRUE,TRUE,TRUE,FALSE)
+  out <- NULL
+  for(i in 1:4){
+    res <- try(MI.local(x=x,W=W,alternative=alternative[i])
+               ,silent=TRUE)
+    out[i] <- class(res)!="try-error"
+  }
+  expect_equal(out, expect)
+})
+
+test_that("W must be of class 'matrix', 'Matrix', or 'data.frame'", {
+  W2 <- as.vector(W)
+  expect_error(MI.local(x=fakedataset$x1,W=W2), "W must be of class 'matrix' or 'data.frame'")
+})
+
+
+#####
 # MI.decomp()
 #####
 test_that("MI.decomp() works with matrix input and returns a data frame with
@@ -387,10 +428,10 @@ test_that("check ideal candidate set size", {
 })
 
 test_that("check 'tol' in lmFilter()", {
-  tol <- c(.1,.01)
+  tol <- c(.5,.01)
   nev <- NULL
-  for(i in 1:2){
-    sf <- lmFilter(y=fakedataset$x3,objfn="MI",alpha=.05,W=W,tol=tol[i])
+  for(i in seq_along(tol)){
+    sf <- lmFilter(y=fakedataset$x1,objfn="MI",alpha=.05,W=W,tol=tol[i])
     nev[i] <- sf$other$nev
   }
   expect_true(nev[1]<nev[2])
@@ -624,6 +665,65 @@ test_that("selects EVs if objfn=='pMI' and initial residuals are significant", {
   sf <- glmFilter(y=y,x=X,W=W,objfn="pMI",model="poisson",sig=.15,positive=TRUE
                  ,bonferroni=FALSE,boot.MI=NULL,resid.type="deviance")
   expect_true(sf$other$nev>0)
+})
+
+
+#####
+# vp()
+#####
+test_that("If msr<100, vp() gives a warning", {
+  y <- fakedataset$x1
+  msr <- c(100,99,101,1)
+  expect <- c(FALSE,TRUE,FALSE,TRUE)
+  out <- NULL
+  for(i in 1:length(expect)){
+    res <- tryCatch(vp(y=y,evecs=NULL,msr=msr[i]),warning=function(x) TRUE)
+    out[i] <- isTRUE(res)
+  }
+  expect_equal(out,expect)
+})
+
+test_that("If msr<100, vp() sets it to 100", {
+  y <- fakedataset$x1
+  out <- suppressWarnings(vp(y=y,x=NULL,evecs=NULL,msr=1))
+  expect_equal(out$msr,100)
+})
+
+test_that("vp() detects perfect multicollinearity", {
+  X <- cbind(fakedataset$x2,fakedataset$x2*2)
+  expect_error(vp(y=fakedataset$x1,x=X,evecs=NULL,msr=100)
+               ,"Perfect multicollinearity in covariates detected")
+})
+
+test_that("vp() detects NAs", {
+  y <- fakedataset$x2
+  y[1] <- NA
+  expect_error(vp(y=y,x=NULL,evecs=NULL,msr=100)
+               ,"Missing values detected")
+})
+
+test_that("vp() works if a single eigenvalue equals zero", {
+  evecs <- getEVs(W=W)$vectors
+  y <- fakedataset$x3
+  zeroes <- which(!vapply(apply(evecs,2,sum)
+                          ,function(x) isTRUE(all.equal(x,0,tolerance=1e-7))
+                          ,FUN.VALUE = TRUE))
+  part <- vp(y=y,x=NULL,evecs=cbind(evecs[,1:20],evecs[,zeroes[1]]),msr=100)
+  expect_equal(class(part),"vpart")
+})
+
+test_that("vp() works if multiple eigenvalues equal zero", {
+  evecs <- getEVs(W=W)$vectors
+  y <- fakedataset$x3
+  part <- vp(y=y,x=NULL,evecs=evecs[,20:80],msr=100)
+  expect_output(print(part))
+})
+
+test_that("Error if nr of covars >= n", {
+  evecs <- getEVs(W=W)$vectors
+  y <- fakedataset$x3
+  expect_error(vp(y=y,x=NULL,evecs=evecs,msr=100)
+               ,"Nr of covariates equals or exceeds n")
 })
 
 

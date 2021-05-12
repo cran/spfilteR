@@ -44,7 +44,7 @@
 #' of Global and Local Indicators of Spatial Association. TEST 27:
 #' pp. 716 - 748.
 #'
-#' @seealso \code{\link{MI.resid}}
+#' @seealso \code{\link{MI.resid}}, \code{\link{MI.local}}
 #'
 #' @importFrom stats sd
 #'
@@ -52,8 +52,7 @@
 #' data(fakedata)
 #' X <- cbind(fakedataset$x1,fakedataset$x2,fakedataset$x3)
 #'
-#' MI <- MI.vec(x=X,W=W,alternative="greater",symmetrize=TRUE)
-#' MI
+#' (MI <- MI.vec(x=X,W=W,alternative="greater",symmetrize=TRUE))
 #'
 #' @export
 
