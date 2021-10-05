@@ -35,7 +35,7 @@
 #' projection matrix: \emph{\strong{M} = \strong{I} - \strong{X} (\strong{X}'
 #' \strong{X})^-1\strong{X}'}. Using this matrix results in a set of
 #' eigenvectors that are uncorrelated to each other as well as to the
-#' covariates. If \code{covars=NULL}, only the intercept term is used
+#' covariates. If \code{covars = NULL}, only the intercept term is used
 #' to construct \emph{\strong{M}}. See e.g., Griffith and Tiefelsdorf (2007)
 #' for more details on the appropriate choice of \emph{\strong{M}}.
 #'
@@ -52,35 +52,39 @@
 #' @examples
 #' data(fakedata)
 #'
-#' E <-getEVs(W=W,covars=NULL)
+#' E <- getEVs(W = W, covars = NULL)
 #'
 #' @export
 
-getEVs <- function(W,covars=NULL){
+getEVs <- function(W, covars = NULL) {
   n <- nrow(W)
   # symmetric connectivity matrix V
   # Note: if W is symmetric, V == W
   V <- .5 * (W + t(W))
 
   # projection matrix M (orthogonal eigenvectors)
-  if(is.null(covars)) covars <- rep(1,n)
+  if (is.null(covars)) {
+    covars <- rep(1, n)
+  }
   covars <- as.matrix(covars)
-  if(!all(covars[,1]==1)) covars <- cbind(1,covars)
+  if (!all(covars[, 1] == 1)) {
+    covars <- cbind(1, covars)
+  }
 
-  M <- diag(n)-covars%*%qr.solve(crossprod(covars),t(covars))
+  M <- diag(n) - covars %*% qr.solve(crossprod(covars), t(covars))
   # if no covars, M equals diag(n)-rep(1,n)%*%t(rep(1,n))/n
 
   # MWM
   MVM <- M %*% V %*% M
 
   # eigenvectors and eigenvalues
-  eigs <- eigen(MVM,symmetric=TRUE)
+  eigs <- eigen(MVM, symmetric = TRUE)
 
   # Moran coefficient for eigenvectors
-  moran <- MI.ev(W=V,evals=eigs$values)
+  moran <- MI.ev(W = V, evals = eigs$values)
 
   # return
-  return(list(vectors=eigs$vectors
-              ,values=eigs$values
-              ,moran=moran))
+  return(list(vectors = eigs$vectors,
+              values = eigs$values,
+              moran = moran))
 }

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Sebastian Juhl" />
 
-<meta name="date" content="2020-11-18" />
+<meta name="date" content="2021-08-13" />
 
 <title>spfilteR: Spatial Filtering with Eigenvectors</title>
 
@@ -32,6 +32,45 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -43,14 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
-</style>
+<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
 code.sourceCode > span { display: inline-block; line-height: 1.25; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -138,7 +170,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
-
 
 
 
@@ -336,7 +367,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">spfilteR: Spatial Filtering with Eigenvectors</h1>
 <h4 class="author">Sebastian Juhl</h4>
-<h4 class="date">2020-11-18</h4>
+<h4 class="date">2021-08-13</h4>
 
 
 
@@ -381,36 +412,36 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Identifying Spatial Autocorrelation</h3>
 <p>In a first step, the function <code>MI.vec()</code> checks for the presence of spatial autocorrelation in the continuous variables by means of Moran’s <em>I</em> <span class="citation">(see also Cliff and Ord 1981, 1972)</span>. The function further allows users to define the alternative hypothesis in order to obtain <em>p</em>-values.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># select continuous variables</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>cont &lt;-<span class="st"> </span><span class="kw">cbind</span>(fakedataset<span class="op">$</span>x1,fakedataset<span class="op">$</span>x2,fakedataset<span class="op">$</span>x3,fakedataset<span class="op">$</span>negative)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">colnames</span>(cont) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>,<span class="st">&quot;x2&quot;</span>,<span class="st">&quot;x3&quot;</span>,<span class="st">&quot;negative&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>cont &lt;-<span class="st"> </span><span class="kw">cbind</span>(fakedataset<span class="op">$</span>x1, fakedataset<span class="op">$</span>x2, fakedataset<span class="op">$</span>x3, fakedataset<span class="op">$</span>negative)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">colnames</span>(cont) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>, <span class="st">&quot;negative&quot;</span>)</span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="co"># Moran test of spatial autocorrelation</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>(I &lt;-<span class="st"> </span><span class="kw">MI.vec</span>(<span class="dt">x=</span>cont,<span class="dt">W=</span>W,<span class="dt">alternative=</span><span class="st">&#39;greater&#39;</span>))</span>
+<span id="cb3-6"><a href="#cb3-6"></a>(I &lt;-<span class="st"> </span><span class="kw">MI.vec</span>(<span class="dt">x =</span> cont, <span class="dt">W =</span> W, <span class="dt">alternative =</span> <span class="st">&#39;greater&#39;</span>))</span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt;                     I          EI        VarI         zI           pI    </span></span>
 <span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; x1        0.311178214 -0.01010101 0.005344193  4.3948248 5.543107e-06 ***</span></span>
 <span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; x2        0.168757531 -0.01010101 0.005344193  2.4466317 7.209904e-03  **</span></span>
 <span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; x3        0.009112739 -0.01010101 0.005344193  0.2628276 3.963417e-01    </span></span>
 <span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; negative -0.244064424 -0.01010101 0.005344193 -3.2004192 9.993139e-01</span></span></code></pre></div>
-<p>The output suggests that the variables <code>x1</code> and <code>x2</code> are positively autocorrelated at conventional levels of statistical significance. Moreover, the standardized value of Moran’s <em>I</em> (<code>zI</code>) indicates that the variable <code>negative</code> is negatively autocorrelated. We can use the function <code>MI.vec()</code> and specify <code>alternative=&#39;lower&#39;</code> to assess the significance of the negative autocorrelation:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">MI.vec</span>(<span class="dt">x=</span>fakedataset<span class="op">$</span>negative,<span class="dt">W=</span>W,<span class="dt">alternative=</span><span class="st">&#39;lower&#39;</span>)</span>
+<p>The output suggests that the variables <code>x1</code> and <code>x2</code> are positively autocorrelated at conventional levels of statistical significance. Moreover, the standardized value of Moran’s <em>I</em> (<code>zI</code>) indicates that the variable <code>negative</code> is negatively autocorrelated. We can use the function <code>MI.vec()</code> and specify <code>alternative = &#39;lower&#39;</code> to assess the significance of the negative autocorrelation:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">MI.vec</span>(<span class="dt">x =</span> fakedataset<span class="op">$</span>negative, <span class="dt">W =</span> W, <span class="dt">alternative =</span> <span class="st">&#39;lower&#39;</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt;            I          EI        VarI        zI           pI    </span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; 1 -0.2440644 -0.01010101 0.005344193 -3.200419 0.0006861391 ***</span></span></code></pre></div>
 <p>Since the Moran coefficient is a global measure of spatial autocorrelation, spatial heterogeneity constitutes a problem for this statistic. More specifically, the simultaneous presence of positive and negative spatial autocorrelation at different scales cannot be revealed by the classical Moran’s <em>I</em>. To circumvent this problem, the function <code>MI.decomp()</code> decomposes the Moran coefficient into a positively and a negatively autocorrelated part and performs a permutation procedure to assess the significance <span class="citation">(Dray 2011)</span>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># decompose Moran&#39;s I</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>(I.dec &lt;-<span class="st"> </span><span class="kw">MI.decomp</span>(<span class="dt">x=</span>cont,<span class="dt">W=</span>W,<span class="dt">nsim=</span><span class="dv">100</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a>(I.dec &lt;-<span class="st"> </span><span class="kw">MI.decomp</span>(<span class="dt">x =</span> cont, <span class="dt">W =</span> W, <span class="dt">nsim=</span><span class="dv">100</span>))</span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;                 I+       VarI+        pI+            I-       VarI-        pI-</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; x1       0.3894789 0.001586008 0.00990099 ** -0.0783007 0.001597098 1.00000000</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; x2       0.3048369 0.001838316 0.02970297  * -0.1360794 0.002110243 0.97029703</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; x3       0.2247566 0.001706596 0.33663366    -0.2156438 0.001613477 0.45544554</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; negative 0.1131614 0.001655388 1.00000000    -0.3572259 0.002076097 0.01980198</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt;            pItwo.sided  </span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; x1          0.01980198 *</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; x2          0.05940594 .</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; x3          0.67326733  </span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; negative *  0.03960396 *</span></span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; x1       0.3894789 0.001280399 0.00990099 ** -0.0783007 0.001557948 1.00000000</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; x2       0.3048369 0.001286495 0.00990099 ** -0.1360794 0.001859987 0.98019802</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; x3       0.2247566 0.001779629 0.38613861    -0.2156438 0.001511256 0.39603960</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; negative 0.1131614 0.001578012 1.00000000    -0.3572259 0.002056452 0.00990099</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt;             pItwo.sided  </span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; x1           0.01980198 *</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; x2           0.01980198 *</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; x3           0.77227723  </span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; negative **  0.01980198 *</span></span></code></pre></div>
 <p>Note that the global Moran’s <em>I</em> is the sum of <code>I+</code> and <code>I-</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># I = &#39;I+&#39; + &#39;I-&#39;</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">cbind</span>(I[,<span class="st">&quot;I&quot;</span>], I.dec[,<span class="st">&quot;I+&quot;</span>] <span class="op">+</span><span class="st"> </span>I.dec[,<span class="st">&quot;I-&quot;</span>])</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">cbind</span>(I[, <span class="st">&quot;I&quot;</span>], I.dec[, <span class="st">&quot;I+&quot;</span>] <span class="op">+</span><span class="st"> </span>I.dec[, <span class="st">&quot;I-&quot;</span>])</span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt;                  [,1]         [,2]</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; x1        0.311178214  0.311178214</span></span>
 <span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; x2        0.168757531  0.168757531</span></span>
@@ -422,52 +453,53 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Assume that we wish to regress <code>x1</code> on <code>x2</code> and test for residual autocorrelation using the function <code>MI.resid()</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># define variables</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>y &lt;-<span class="st"> </span>fakedataset<span class="op">$</span>x1</span>
-<span id="cb7-3"><a href="#cb7-3"></a>X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>,fakedataset<span class="op">$</span>x2)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>X &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, fakedataset<span class="op">$</span>x2)</span>
 <span id="cb7-4"><a href="#cb7-4"></a></span>
 <span id="cb7-5"><a href="#cb7-5"></a><span class="co"># OLS regression</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>ols.resid &lt;-<span class="st"> </span><span class="kw">resid</span>(<span class="kw">lm</span>(y<span class="op">~</span>X))</span>
+<span id="cb7-6"><a href="#cb7-6"></a>ols.resid &lt;-<span class="st"> </span><span class="kw">resid</span>(<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>X))</span>
 <span id="cb7-7"><a href="#cb7-7"></a></span>
 <span id="cb7-8"><a href="#cb7-8"></a><span class="co"># Moran test of residual spatial autocorrelation</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="kw">MI.resid</span>(<span class="dt">resid=</span>ols.resid,<span class="dt">W=</span>W,<span class="dt">alternative=</span><span class="st">&#39;greater&#39;</span>)</span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="kw">MI.resid</span>(<span class="dt">resid =</span> ols.resid, <span class="dt">W =</span> W, <span class="dt">alternative =</span> <span class="st">&#39;greater&#39;</span>)</span>
 <span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt;          I          EI        VarI       zI           pI    </span></span>
 <span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; 1 0.350568 -0.01010101 0.005344193 4.933643 4.035495e-07 ***</span></span></code></pre></div>
 <p>The results show that the residuals are significantly autocorrelated which violates the assumption of uncorrelated errors. In order to resolve this problem of spatial autocorrelation in regression residuals, the function <code>lmFilter()</code> estimates a spatially filtered linear regression model using an unsupervised stepwise regression to identify relevant eigenvectors derived from the transformed connectivity matrix. Below, the unsupervised eigenvector search algorithm selects eigenvectors based on the reduction in residual autocorrelation. The output is a class <code>spfilter</code> object.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># ESF model</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>(lm.esf &lt;-<span class="st"> </span><span class="kw">lmFilter</span>(<span class="dt">y=</span>y,<span class="dt">x=</span>X,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;MI&#39;</span>,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">TRUE</span>,<span class="dt">tol=</span>.<span class="dv">2</span>))</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; 8 out of 22 candidate eigenvectors selected</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="kw">summary</span>(lm.esf,<span class="dt">EV=</span><span class="ot">TRUE</span>)</span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; </span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt;  - Spatial Filtering with Eigenvectors (Linear Model)  -</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; </span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; Coefficients (OLS):</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt;              Estimate         SE      p-value    </span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; (Intercept) 9.2169316 0.66572188 5.088489e-24 ***</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; beta_1      0.9947113 0.07995667 2.932913e-21 ***</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; </span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; Adjusted R-squared:</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt;   Initial  Filtered </span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; 0.4673945 0.7257458 </span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; </span></span>
-<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt; Filtered for positive spatial autocorrelation</span></span>
-<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt; 8 out of 22 candidate eigenvectors selected</span></span>
-<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#&gt; Objective Function: &quot;MI&quot;</span></span>
-<span id="cb8-21"><a href="#cb8-21"></a><span class="co">#&gt; </span></span>
-<span id="cb8-22"><a href="#cb8-22"></a><span class="co">#&gt; Summary of selected eigenvectors:</span></span>
-<span id="cb8-23"><a href="#cb8-23"></a><span class="co">#&gt;        Estimate       SE      p-value  partialR2      VIF        MI    </span></span>
-<span id="cb8-24"><a href="#cb8-24"></a><span class="co">#&gt; ev_13 -9.580545 1.447552 2.550912e-09 0.23208263 1.005781 0.6302019 ***</span></span>
-<span id="cb8-25"><a href="#cb8-25"></a><span class="co">#&gt; ev_4  -3.239103 1.481047 3.133258e-02 0.02873360 1.049729 0.9257835   *</span></span>
-<span id="cb8-26"><a href="#cb8-26"></a><span class="co">#&gt; ev_10 -5.529712 1.453592 2.589498e-04 0.07901543 1.013360 0.7303271 ***</span></span>
-<span id="cb8-27"><a href="#cb8-27"></a><span class="co">#&gt; ev_2   4.885225 1.444218 1.064466e-03 0.06058390 1.001660 1.0004147  **</span></span>
-<span id="cb8-28"><a href="#cb8-28"></a><span class="co">#&gt; ev_9   3.458918 1.469630 2.076982e-02 0.03041775 1.034209 0.7638378   *</span></span>
-<span id="cb8-29"><a href="#cb8-29"></a><span class="co">#&gt; ev_20  4.188058 1.445305 4.720290e-03 0.04411345 1.002998 0.4539879  **</span></span>
-<span id="cb8-30"><a href="#cb8-30"></a><span class="co">#&gt; ev_5  -2.863850 1.452437 5.170840e-02 0.02055372 1.011899 0.8968632   .</span></span>
-<span id="cb8-31"><a href="#cb8-31"></a><span class="co">#&gt; ev_19  3.805433 1.443517 9.873617e-03 0.03671349 1.000798 0.4615722  **</span></span>
-<span id="cb8-32"><a href="#cb8-32"></a><span class="co">#&gt; </span></span>
-<span id="cb8-33"><a href="#cb8-33"></a><span class="co">#&gt; Moran&#39;s I (Residuals):</span></span>
-<span id="cb8-34"><a href="#cb8-34"></a><span class="co">#&gt;             Observed    Expected   Variance         z      p-value    </span></span>
-<span id="cb8-35"><a href="#cb8-35"></a><span class="co">#&gt; Initial   0.35056797 -0.01192610 0.01207299 3.2990854 0.0004850019 ***</span></span>
-<span id="cb8-36"><a href="#cb8-36"></a><span class="co">#&gt; Filtered -0.03446177 -0.07716672 0.04880722 0.1933019 0.4233612531</span></span></code></pre></div>
+<span id="cb8-2"><a href="#cb8-2"></a>(lm.esf &lt;-<span class="st"> </span><span class="kw">lmFilter</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> X, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;MI&#39;</span>, <span class="dt">positive =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>                    <span class="dt">ideal.setsize =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="fl">.2</span>))</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; 8 out of 22 candidate eigenvectors selected</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">summary</span>(lm.esf, <span class="dt">EV =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; </span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt;  - Spatial Filtering with Eigenvectors (Linear Model)  -</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; </span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; Coefficients (OLS):</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt;              Estimate         SE      p-value    </span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; (Intercept) 9.2169316 0.66572188 5.088489e-24 ***</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; beta_1      0.9947113 0.07995667 2.932913e-21 ***</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; </span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; Adjusted R-squared:</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt;   Initial  Filtered </span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; 0.4673945 0.7257458 </span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt; </span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt; Filtered for positive spatial autocorrelation</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#&gt; 8 out of 22 candidate eigenvectors selected</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="co">#&gt; Objective Function: &quot;MI&quot;</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="co">#&gt; </span></span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="co">#&gt; Summary of selected eigenvectors:</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="co">#&gt;        Estimate       SE      p-value  partialR2      VIF        MI    </span></span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="co">#&gt; ev_13 -9.580545 1.447552 2.550912e-09 0.23208263 1.005781 0.6302019 ***</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="co">#&gt; ev_4  -3.239103 1.481047 3.133258e-02 0.02873360 1.049729 0.9257835   *</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="co">#&gt; ev_10 -5.529712 1.453592 2.589498e-04 0.07901543 1.013360 0.7303271 ***</span></span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="co">#&gt; ev_2   4.885225 1.444218 1.064466e-03 0.06058390 1.001660 1.0004147  **</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="co">#&gt; ev_9   3.458918 1.469630 2.076982e-02 0.03041775 1.034209 0.7638378   *</span></span>
+<span id="cb8-30"><a href="#cb8-30"></a><span class="co">#&gt; ev_20  4.188058 1.445305 4.720290e-03 0.04411345 1.002998 0.4539879  **</span></span>
+<span id="cb8-31"><a href="#cb8-31"></a><span class="co">#&gt; ev_5  -2.863850 1.452437 5.170840e-02 0.02055372 1.011899 0.8968632   .</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="co">#&gt; ev_19  3.805433 1.443517 9.873617e-03 0.03671349 1.000798 0.4615722  **</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="co">#&gt; </span></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="co">#&gt; Moran&#39;s I (Residuals):</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="co">#&gt;             Observed    Expected   Variance         z      p-value    </span></span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="co">#&gt; Initial   0.35056797 -0.01192610 0.01207299 3.2990854 0.0004850019 ***</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="co">#&gt; Filtered -0.03446177 -0.07716672 0.04880722 0.1933019 0.4233612531</span></span></code></pre></div>
 <p>While the <code>print</code> method shows that 8 eigenvectors were selected from the candidate set consisting of 22 eigenvectors, the <code>summary</code> method provides additional information. Besides the ordinary least squares (OLS) parameter estimates, the output shows that the ESF model filters for positive spatial autocorrelation using the minimization of residual autocorrelation as objective function during the eigenvector search. A comparison between the filtered and the nonspatial OLS model with respect to model fit and residual autocorrelation is also provided. Since the option <code>EV</code> is set to <code>TRUE</code>, the <code>summary</code> method also displays information on the selected eigenvectors. As the results show, the ESF model successfully removes the spatial pattern from model residuals.</p>
 <p>The <code>plot</code> method allows for an easy visualization of the results. The graph displays the Moran coefficient associated with each of the eigenvectors. The shaded area signifies the candidate set and selected eigenvectors are illustrated by black dots.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">plot</span>(lm.esf)</span></code></pre></div>
@@ -475,21 +507,21 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Moreover, <code>lmFilter()</code> also allows users to select eigenvectors based on alternative selection criteria:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">### Alternative selection criteria:</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a><span class="co"># maximization of model fit</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">lmFilter</span>(<span class="dt">y=</span>y,<span class="dt">x=</span>X,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;R2&#39;</span>,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">TRUE</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">lmFilter</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> X, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;R2&#39;</span>, <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; 11 out of 22 candidate eigenvectors selected</span></span>
 <span id="cb10-5"><a href="#cb10-5"></a></span>
 <span id="cb10-6"><a href="#cb10-6"></a><span class="co"># significance of residual autocorrelation</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="kw">lmFilter</span>(<span class="dt">y=</span>y,<span class="dt">x=</span>X,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;pMI&#39;</span>,<span class="dt">sig=</span>.<span class="dv">1</span>,<span class="dt">bonferroni=</span><span class="ot">FALSE</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a>         ,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">TRUE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="kw">lmFilter</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> X, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;pMI&#39;</span>, <span class="dt">sig =</span> <span class="fl">.1</span>, <span class="dt">bonferroni =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb10-8"><a href="#cb10-8"></a>         <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; 3 out of 22 candidate eigenvectors selected</span></span>
 <span id="cb10-10"><a href="#cb10-10"></a></span>
 <span id="cb10-11"><a href="#cb10-11"></a><span class="co"># significance of eigenvectors</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="kw">lmFilter</span>(<span class="dt">y=</span>y,<span class="dt">x=</span>X,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;p&#39;</span>,<span class="dt">sig=</span>.<span class="dv">1</span>,<span class="dt">bonferroni=</span><span class="ot">TRUE</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a>         ,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">TRUE</span>)</span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="kw">lmFilter</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> X, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;p&#39;</span>, <span class="dt">sig =</span> <span class="fl">.1</span>, <span class="dt">bonferroni =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb10-13"><a href="#cb10-13"></a>         <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; 3 out of 22 candidate eigenvectors selected</span></span>
 <span id="cb10-15"><a href="#cb10-15"></a></span>
 <span id="cb10-16"><a href="#cb10-16"></a><span class="co"># all eigenvectors in the candidate set</span></span>
-<span id="cb10-17"><a href="#cb10-17"></a><span class="kw">lmFilter</span>(<span class="dt">y=</span>y,<span class="dt">x=</span>X,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;all&#39;</span>,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">TRUE</span>)</span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="kw">lmFilter</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> X, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;all&#39;</span>, <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb10-18"><a href="#cb10-18"></a><span class="co">#&gt; 22 out of 22 candidate eigenvectors selected</span></span></code></pre></div>
 <p>If users wish to select eigenvectors based on individual selection criteria, they can obtain the eigenvectors using the function <code>getEVs()</code> and perform a supervised selection procedure using the basic <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm"><code>stats::lm()</code></a> command.</p>
 </div>
@@ -502,22 +534,24 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb11-3"><a href="#cb11-3"></a>y.count &lt;-<span class="st"> </span>fakedataset<span class="op">$</span>count</span>
 <span id="cb11-4"><a href="#cb11-4"></a></span>
 <span id="cb11-5"><a href="#cb11-5"></a><span class="co"># ESF logit model</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>(logit.esf &lt;-<span class="st"> </span><span class="kw">glmFilter</span>(<span class="dt">y=</span>y.bin,<span class="dt">x=</span><span class="ot">NULL</span>,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;p&#39;</span>,<span class="dt">model=</span><span class="st">&#39;logit&#39;</span>,<span class="dt">optim.method=</span><span class="st">&#39;BFGS&#39;</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a>                        ,<span class="dt">sig=</span>.<span class="dv">1</span>,<span class="dt">bonferroni=</span><span class="ot">FALSE</span>,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">FALSE</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a>                        ,<span class="dt">alpha=</span>.<span class="dv">25</span>,<span class="dt">resid.type=</span><span class="st">&#39;deviance&#39;</span>,<span class="dt">boot.MI=</span><span class="dv">100</span>))</span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; 5 out of 31 candidate eigenvectors selected</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co"># ESF probit model</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a>(probit.esf &lt;-<span class="st"> </span><span class="kw">glmFilter</span>(<span class="dt">y=</span>y.bin,<span class="dt">x=</span><span class="ot">NULL</span>,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;p&#39;</span>,<span class="dt">model=</span><span class="st">&#39;probit&#39;</span>,<span class="dt">optim.method=</span><span class="st">&#39;BFGS&#39;</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a>                         ,<span class="dt">sig=</span>.<span class="dv">1</span>,<span class="dt">bonferroni=</span><span class="ot">FALSE</span>,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">FALSE</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a>                         ,<span class="dt">alpha=</span>.<span class="dv">25</span>,<span class="dt">resid.type=</span><span class="st">&#39;deviance&#39;</span>,<span class="dt">boot.MI=</span><span class="dv">100</span>))</span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; 5 out of 31 candidate eigenvectors selected</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a></span>
-<span id="cb11-17"><a href="#cb11-17"></a><span class="co"># ESF poisson model</span></span>
-<span id="cb11-18"><a href="#cb11-18"></a>(poisson.esf &lt;-<span class="st"> </span><span class="kw">glmFilter</span>(<span class="dt">y=</span>y.count,<span class="dt">x=</span><span class="ot">NULL</span>,<span class="dt">W=</span>W,<span class="dt">objfn=</span><span class="st">&#39;BIC&#39;</span>,<span class="dt">model=</span><span class="st">&#39;poisson&#39;</span>,<span class="dt">optim.method=</span><span class="st">&#39;BFGS&#39;</span></span>
-<span id="cb11-19"><a href="#cb11-19"></a>                          ,<span class="dt">positive=</span><span class="ot">TRUE</span>,<span class="dt">ideal.setsize=</span><span class="ot">FALSE</span>,<span class="dt">alpha=</span>.<span class="dv">25</span>,<span class="dt">resid.type=</span><span class="st">&#39;deviance&#39;</span></span>
-<span id="cb11-20"><a href="#cb11-20"></a>                          ,<span class="dt">boot.MI=</span><span class="dv">100</span>))</span>
-<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt; 7 out of 31 candidate eigenvectors selected</span></span></code></pre></div>
+<span id="cb11-6"><a href="#cb11-6"></a>(logit.esf &lt;-<span class="st"> </span><span class="kw">glmFilter</span>(<span class="dt">y =</span> y.bin, <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;p&#39;</span>, <span class="dt">model =</span> <span class="st">&#39;logit&#39;</span>,</span>
+<span id="cb11-7"><a href="#cb11-7"></a>                        <span class="dt">optim.method =</span> <span class="st">&#39;BFGS&#39;</span>, <span class="dt">sig =</span> <span class="fl">.1</span>, <span class="dt">bonferroni =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb11-8"><a href="#cb11-8"></a>                        <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">.25</span>,</span>
+<span id="cb11-9"><a href="#cb11-9"></a>                        <span class="dt">resid.type =</span> <span class="st">&#39;deviance&#39;</span>, <span class="dt">boot.MI =</span> <span class="dv">100</span>))</span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; 5 out of 31 candidate eigenvectors selected</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co"># ESF probit model</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a>(probit.esf &lt;-<span class="st"> </span><span class="kw">glmFilter</span>(<span class="dt">y =</span> y.bin, <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;p&#39;</span>, <span class="dt">model =</span> <span class="st">&#39;probit&#39;</span>,</span>
+<span id="cb11-14"><a href="#cb11-14"></a>                         <span class="dt">optim.method =</span> <span class="st">&#39;BFGS&#39;</span>, <span class="dt">sig =</span> <span class="fl">.1</span>, <span class="dt">bonferroni =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb11-15"><a href="#cb11-15"></a>                         <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">.25</span>,</span>
+<span id="cb11-16"><a href="#cb11-16"></a>                         <span class="dt">resid.type =</span> <span class="st">&#39;deviance&#39;</span>, <span class="dt">boot.MI =</span> <span class="dv">100</span>))</span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; 5 out of 31 candidate eigenvectors selected</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co"># ESF poisson model</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a>(poisson.esf &lt;-<span class="st"> </span><span class="kw">glmFilter</span>(<span class="dt">y =</span> y.count, <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">W =</span> W, <span class="dt">objfn =</span> <span class="st">&#39;BIC&#39;</span>, <span class="dt">model =</span> <span class="st">&#39;poisson&#39;</span>,</span>
+<span id="cb11-21"><a href="#cb11-21"></a>                          <span class="dt">optim.method =</span> <span class="st">&#39;BFGS&#39;</span>, <span class="dt">positive =</span> <span class="ot">TRUE</span>, <span class="dt">ideal.setsize =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb11-22"><a href="#cb11-22"></a>                          <span class="dt">alpha =</span> <span class="fl">.25</span>, <span class="dt">resid.type =</span> <span class="st">&#39;deviance&#39;</span>, <span class="dt">boot.MI =</span> <span class="dv">100</span>))</span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; 7 out of 31 candidate eigenvectors selected</span></span></code></pre></div>
 <p>Again, if users wish to define individual selection criteria or fit a GLM currently not implemented in <code>glmFilter()</code>, they can obtain the eigenvectors using the <code>getEVs()</code> command and perform supervised eigenvector selection using the standard <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/glm"><code>stats::glm()</code></a> function.</p>
 </div>
 </div>

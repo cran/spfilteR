@@ -1,3 +1,20 @@
+# spfilteR 1.1.1
+
+- CRAN resubmission
+- improve readability of code
+- update author mail address
+- include citation
+
+---
+
+# spfilteR 1.1.0.9000
+
+- improve readability of code
+- update author mail address
+- include citation
+
+---
+
 # spfilteR 1.1.0
 
 - CRAN resubmission
