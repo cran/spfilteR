@@ -29,45 +29,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
   }
 });
 </script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -79,11 +40,19 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -168,6 +137,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </script>
 
 
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <style type="text/css">body {
 background-color: #fff;
@@ -361,7 +353,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">spfilteR: Spatial Filtering with Eigenvectors</h1>
+<h1 class="title toc-ignore">spfilteR: Spatial Filtering with
+Eigenvectors</h1>
 <h4 class="author">Sebastian Juhl</h4>
 <h4 class="date">2021-08-13</h4>
 
@@ -369,12 +362,31 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The <code>spfilteR</code> package provides tools to implement the eigenvector-based spatial filtering (ESF) approach put forth by <span class="citation">Griffith (2003)</span> in linear and generalized linear regression models. It allows users to obtain eigenvectors from a transformed connectivity matrix and supports the supervised and unsupervised creation of a synthetic spatial filter. For the unsupervised approach, eigenvectors can be selected based on either i) the maximization of model fit, ii) the minimization of residual autocorrelation, iii) the statistical significance of residual autocorrelation, or iv) the significance level of candidate eigenvectors. Alternatively, all eigenvectors in the search set may be included so that no selection takes place. While the functions provide a high flexibility, only a minimum of code is required to implement the unsupervised ESF approach.</p>
-<p>This vignette solely focuses on the workflow to illustrate the functionality of the <code>spfilteR</code> package. For a discussion on the ESF methodology, interested readers may be referred to other sources, e.g., <span class="citation">Griffith, Chun, and Li (2019)</span> or <span class="citation">Tiefelsdorf and Griffith (2007)</span>.</p>
+<p>The <code>spfilteR</code> package provides tools to implement the
+eigenvector-based spatial filtering (ESF) approach put forth by <span class="citation">Griffith (2003)</span> in linear and generalized linear
+regression models. It allows users to obtain eigenvectors from a
+transformed connectivity matrix and supports the supervised and
+unsupervised creation of a synthetic spatial filter. For the
+unsupervised approach, eigenvectors can be selected based on either i)
+the maximization of model fit, ii) the minimization of residual
+autocorrelation, iii) the statistical significance of residual
+autocorrelation, or iv) the significance level of candidate
+eigenvectors. Alternatively, all eigenvectors in the search set may be
+included so that no selection takes place. While the functions provide a
+high flexibility, only a minimum of code is required to implement the
+unsupervised ESF approach.</p>
+<p>This vignette solely focuses on the workflow to illustrate the
+functionality of the <code>spfilteR</code> package. For a discussion on
+the ESF methodology, interested readers may be referred to other
+sources, e.g., <span class="citation">Griffith, Chun, and Li
+(2019)</span> or <span class="citation">Tiefelsdorf and Griffith
+(2007)</span>.</p>
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p>A stable release version of the <code>spfilteR</code> package is available on CRAN and the latest development version can be downloaded from <a href="https://github.com/sjuhl/spfilteR">GitHub</a>.</p>
+<p>A stable release version of the <code>spfilteR</code> package is
+available on CRAN and the latest development version can be downloaded
+from <a href="https://github.com/sjuhl/spfilteR">GitHub</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CRAN release</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;spfilteR&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -384,7 +396,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="getting-started" class="section level2">
 <h2>Getting Started</h2>
-<p>Together with the main functions, the package contains an artificial dataset (<code>fakedataset</code>) and a connectivity matrix (<code>W</code>) connecting the 100 cross-sections on a regular grid by using the rook criterion of adjacency. For illustrative purposes, the following examples utilize the fake dataset.</p>
+<p>Together with the main functions, the package contains an artificial
+dataset (<code>fakedataset</code>) and a connectivity matrix
+(<code>W</code>) connecting the 100 cross-sections on a regular grid by
+using the rook criterion of adjacency. For illustrative purposes, the
+following examples utilize the fake dataset.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the package</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spfilteR)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -403,10 +419,16 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  4         1     4 15.21778  7.817901  1.5948141 -2.737914        2</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  5         1     3 15.56298  7.903947 -1.2708973 -1.117427        2</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  6         1     2 17.43941 11.254842 -1.4158475  1.577442        2</span></span></code></pre></div>
-<p>Besides an <code>ID</code> variable, the dataset contains a binary <code>indicator</code> variable, two count variables, and four continuous variables.</p>
+<p>Besides an <code>ID</code> variable, the dataset contains a binary
+<code>indicator</code> variable, two count variables, and four
+continuous variables.</p>
 <div id="identifying-spatial-autocorrelation" class="section level3">
 <h3>Identifying Spatial Autocorrelation</h3>
-<p>In a first step, the function <code>MI.vec()</code> checks for the presence of spatial autocorrelation in the continuous variables by means of Moran’s <em>I</em> <span class="citation">(see also Cliff and Ord 1981; Cliff and Ord 1972)</span>. The function further allows users to define the alternative hypothesis in order to obtain <em>p</em>-values.</p>
+<p>In a first step, the function <code>MI.vec()</code> checks for the
+presence of spatial autocorrelation in the continuous variables by means
+of Moran’s <em>I</em> <span class="citation">(see also Cliff and Ord
+1981, 1972)</span>. The function further allows users to define the
+alternative hypothesis in order to obtain <em>p</em>-values.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select continuous variables</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cont <span class="ot">&lt;-</span> <span class="fu">cbind</span>(fakedataset<span class="sc">$</span>x1, fakedataset<span class="sc">$</span>x2, fakedataset<span class="sc">$</span>x3, fakedataset<span class="sc">$</span>negative)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cont) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>, <span class="st">&quot;negative&quot;</span>)</span>
@@ -418,24 +440,39 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x2        0.168757531 -0.01010101 0.005344193  2.4466317 7.209904e-03  **</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x3        0.009112739 -0.01010101 0.005344193  0.2628276 3.963417e-01    </span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative -0.244064424 -0.01010101 0.005344193 -3.2004192 9.993139e-01</span></span></code></pre></div>
-<p>The output suggests that the variables <code>x1</code> and <code>x2</code> are positively autocorrelated at conventional levels of statistical significance. Moreover, the standardized value of Moran’s <em>I</em> (<code>zI</code>) indicates that the variable <code>negative</code> is negatively autocorrelated. We can use the function <code>MI.vec()</code> and specify <code>alternative = &#39;lower&#39;</code> to assess the significance of the negative autocorrelation:</p>
+<p>The output suggests that the variables <code>x1</code> and
+<code>x2</code> are positively autocorrelated at conventional levels of
+statistical significance. Moreover, the standardized value of Moran’s
+<em>I</em> (<code>zI</code>) indicates that the variable
+<code>negative</code> is negatively autocorrelated. We can use the
+function <code>MI.vec()</code> and specify
+<code>alternative = &#39;lower&#39;</code> to assess the significance of the
+negative autocorrelation:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MI.vec</span>(<span class="at">x =</span> fakedataset<span class="sc">$</span>negative, <span class="at">W =</span> W, <span class="at">alternative =</span> <span class="st">&#39;lower&#39;</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            I          EI        VarI        zI           pI    </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 -0.2440644 -0.01010101 0.005344193 -3.200419 0.0006861391 ***</span></span></code></pre></div>
-<p>Since the Moran coefficient is a global measure of spatial autocorrelation, spatial heterogeneity constitutes a problem for this statistic. More specifically, the simultaneous presence of positive and negative spatial autocorrelation at different scales cannot be revealed by the classical Moran’s <em>I</em>. To circumvent this problem, the function <code>MI.decomp()</code> decomposes the Moran coefficient into a positively and a negatively autocorrelated part and performs a permutation procedure to assess the significance <span class="citation">(Dray 2011)</span>:</p>
+<p>Since the Moran coefficient is a global measure of spatial
+autocorrelation, spatial heterogeneity constitutes a problem for this
+statistic. More specifically, the simultaneous presence of positive and
+negative spatial autocorrelation at different scales cannot be revealed
+by the classical Moran’s <em>I</em>. To circumvent this problem, the
+function <code>MI.decomp()</code> decomposes the Moran coefficient into
+a positively and a negatively autocorrelated part and performs a
+permutation procedure to assess the significance <span class="citation">(Dray 2011)</span>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># decompose Moran&#39;s I</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(I.dec <span class="ot">&lt;-</span> <span class="fu">MI.decomp</span>(<span class="at">x =</span> cont, <span class="at">W =</span> W, <span class="at">nsim=</span><span class="dv">100</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                 I+       VarI+        pI+            I-       VarI-        pI-</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x1       0.3894789 0.001566509 0.00990099 ** -0.0783007 0.001596023 1.00000000</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x2       0.3048369 0.001982323 0.01980198  * -0.1360794 0.001637453 0.98019802</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x3       0.2247566 0.001384544 0.28712871    -0.2156438 0.001725732 0.55445545</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative 0.1131614 0.002190064 0.98019802    -0.3572259 0.001970761 0.00990099</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x1       0.3894789 0.002025092 0.00990099 ** -0.0783007 0.001730153 1.00000000</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x2       0.3048369 0.002248250 0.03960396  * -0.1360794 0.001786746 0.98019802</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x3       0.2247566 0.001587511 0.29702970    -0.2156438 0.001829118 0.46534653</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative 0.1131614 0.002175911 1.00000000    -0.3572259 0.001885981 0.00990099</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             pItwo.sided  </span></span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x1           0.01980198 *</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x2           0.03960396 *</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x3           0.57425743  </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x2           0.07920792 .</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; x3           0.59405941  </span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; negative **  0.01980198 *</span></span></code></pre></div>
-<p>Note that the global Moran’s <em>I</em> is the sum of <code>I+</code> and <code>I-</code>:</p>
+<p>Note that the global Moran’s <em>I</em> is the sum of <code>I+</code>
+and <code>I-</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># I = &#39;I+&#39; + &#39;I-&#39;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(I[, <span class="st">&quot;I&quot;</span>], I.dec[, <span class="st">&quot;I+&quot;</span>] <span class="sc">+</span> I.dec[, <span class="st">&quot;I-&quot;</span>])</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                  [,1]         [,2]</span></span>
@@ -446,7 +483,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="unsupervised-spatial-filtering-in-linear-models" class="section level3">
 <h3>Unsupervised Spatial Filtering in Linear Models</h3>
-<p>Assume that we wish to regress <code>x1</code> on <code>x2</code> and test for residual autocorrelation using the function <code>MI.resid()</code>.</p>
+<p>Assume that we wish to regress <code>x1</code> on <code>x2</code> and
+test for residual autocorrelation using the function
+<code>MI.resid()</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define variables</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> fakedataset<span class="sc">$</span>x1</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, fakedataset<span class="sc">$</span>x2)</span>
@@ -458,7 +497,15 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">MI.resid</span>(<span class="at">resid =</span> ols.resid, <span class="at">W =</span> W, <span class="at">alternative =</span> <span class="st">&#39;greater&#39;</span>)</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          I          EI        VarI       zI           pI    </span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0.350568 -0.01010101 0.005344193 4.933643 4.035495e-07 ***</span></span></code></pre></div>
-<p>The results show that the residuals are significantly autocorrelated which violates the assumption of uncorrelated errors. In order to resolve this problem of spatial autocorrelation in regression residuals, the function <code>lmFilter()</code> estimates a spatially filtered linear regression model using an unsupervised stepwise regression to identify relevant eigenvectors derived from the transformed connectivity matrix. Below, the unsupervised eigenvector search algorithm selects eigenvectors based on the reduction in residual autocorrelation. The output is a class <code>spfilter</code> object.</p>
+<p>The results show that the residuals are significantly autocorrelated
+which violates the assumption of uncorrelated errors. In order to
+resolve this problem of spatial autocorrelation in regression residuals,
+the function <code>lmFilter()</code> estimates a spatially filtered
+linear regression model using an unsupervised stepwise regression to
+identify relevant eigenvectors derived from the transformed connectivity
+matrix. Below, the unsupervised eigenvector search algorithm selects
+eigenvectors based on the reduction in residual autocorrelation. The
+output is a class <code>spfilter</code> object.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ESF model</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>(lm.esf <span class="ot">&lt;-</span> <span class="fu">lmFilter</span>(<span class="at">y =</span> y, <span class="at">x =</span> X, <span class="at">W =</span> W, <span class="at">objfn =</span> <span class="st">&#39;MI&#39;</span>, <span class="at">positive =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ideal.setsize =</span> <span class="cn">TRUE</span>, <span class="at">tol =</span> .<span class="dv">2</span>))</span>
@@ -496,11 +543,26 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             Observed    Expected   Variance         z      p-value    </span></span>
 <span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Initial   0.35056797 -0.01192610 0.01207299 3.2990854 0.0004850019 ***</span></span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Filtered -0.03446177 -0.07716672 0.04880722 0.1933019 0.4233612531</span></span></code></pre></div>
-<p>While the <code>print</code> method shows that 8 eigenvectors were selected from the candidate set consisting of 22 eigenvectors, the <code>summary</code> method provides additional information. Besides the ordinary least squares (OLS) parameter estimates, the output shows that the ESF model filters for positive spatial autocorrelation using the minimization of residual autocorrelation as objective function during the eigenvector search. A comparison between the filtered and the nonspatial OLS model with respect to model fit and residual autocorrelation is also provided. Since the option <code>EV</code> is set to <code>TRUE</code>, the <code>summary</code> method also displays information on the selected eigenvectors. As the results show, the ESF model successfully removes the spatial pattern from model residuals.</p>
-<p>The <code>plot</code> method allows for an easy visualization of the results. The graph displays the Moran coefficient associated with each of the eigenvectors. The shaded area signifies the candidate set and selected eigenvectors are illustrated by black dots.</p>
+<p>While the <code>print</code> method shows that 8 eigenvectors were
+selected from the candidate set consisting of 22 eigenvectors, the
+<code>summary</code> method provides additional information. Besides the
+ordinary least squares (OLS) parameter estimates, the output shows that
+the ESF model filters for positive spatial autocorrelation using the
+minimization of residual autocorrelation as objective function during
+the eigenvector search. A comparison between the filtered and the
+nonspatial OLS model with respect to model fit and residual
+autocorrelation is also provided. Since the option <code>EV</code> is
+set to <code>TRUE</code>, the <code>summary</code> method also displays
+information on the selected eigenvectors. As the results show, the ESF
+model successfully removes the spatial pattern from model residuals.</p>
+<p>The <code>plot</code> method allows for an easy visualization of the
+results. The graph displays the Moran coefficient associated with each
+of the eigenvectors. The shaded area signifies the candidate set and
+selected eigenvectors are illustrated by black dots.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm.esf)</span></code></pre></div>
 <p><img src="data:image/png;base64,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rHauRU305LzzznN9+/YN+/L999+74cOHu44dO7qVV17ZnXDCCe66665zvXr1CsuwgVQBg/vxj3/stthiCzdp0qTwONOeLl26uDfeeMPtsssubplllnGbbLKJu/POO6XMd99957p16+ZuuOGG8Bw2Pv74Y7f55pu7Bx54QPb/85//dAMHDnRrrrmmW2GFFdw+++zj3nnnnZxzvvzySzdo0CDXvn17t+6667qhQ4e69957z3311Vduyy23lLJnn322U0b773//240aNcptuOGGYd+1X1ox0tKf//xnt9VWW7l11lnH3XfffXrIfstFwL8RjBocgU8//ZTXfjBy5MjUkR555JGBZyRhuXPOOSdYfPHFg9/97nfB7bffHvgpTLDkkksGHTp0CMtcfPHFwUILLRR4phTccccdgWdSgdc1BRMnTpQyU6ZMkf9rrbVW4Jlb4BlY4JmU7Js7d66U2X///WVfWKnfuOqqq6Ttzz//PPCMMPAMJFh++eWD008/XfriGUOw4oorBowP8swk2HPPPYOf//zngWeIwfXXXx94hhHsvffewYIFC+Q/OBxxxBGBZ5ByzhlnnBEsvPDCAb933313wPgpM3bsWDnO1xJLLBH4aWngp6fB7rvvHsyaNSs8ZhvlIYBIatTgCCgD4kFbbLHFWny89BEiEGVAH3zwgTCW3/72t+FxL4XIQ7/RRhvJvs8++yxYeumlAy9RhGXYgKF4CUT2wYB4qEeMGBGW8ZKL7LvmmmtkHw8/Zd5+++2wzPbbby9MjR233XabHL/nnnvC4/QF5gBDgrzkImWee+65sMz06dOFYb722muBl7Tk+I033ijH33333WCRRRYJvNQXlmfjoIMOCn72s59Jef7ThpcAhcHx3yg7BEwH5O/6ZqEePXrIVCc+3lVWWSW+S/6/8MILjikK5yn5h9F5KcMxrYIo849//MN17tzZ+Qdfi8mUxktM7u9//3u4zzOUcHu11VZzP/rRj9wXX3wh+3bbbTe33HLLOc4ZMmSI+/DDD90jjzzi7rrrLjn+6KOPOs/oZOoVbWfTTTd1TzzxhJR58cUXnZeyZCqoDe2www7SBtY/LwXpbvml7+yLTjk50K9fP3fzzTe7N998022wwQZSliniD39oGgsBI8MvY0AZglnrVe24445u8ODBBXfTSw3y0KHTiRK6ICUvscjmcccdp7tyfvU4O9HbRGnRRRcVBsc+L4m4Aw44wI0fP14Y0IQJE9xPf/pTt+uuu8op1AOjQ5cUp3bt2smuV199VfRU8eMwnyR66623xC0hzoD9FE6KoztSBgTDNMoeAWPp2WPaMDV6fYtDCa1Sig4sKtXAJKDHHnvMoSSOf1BMK+VjBHr84IMPds8884ybN2+eMCIYEowJQnENo0HJHG/jlVdekTJISDCpOKHM9pOG+G6RuNjvp5E5xz755BP5jzSl5Kevumm/GSJgDChDMButKiQfmIbX4YRDY0o2bdq08D/WJggrEdMz/SDJDBgwoMW0JzwxYQMfHSxcWNSYVuG3pOR1Tg4pCGajbXjluFi8sMpBSCtY2pSBsO/11193K620kps6daqMhX0wVQjLF/Twww/Lr37xf6mllhKGp/vst0IIZKdOsppqFQFVQvsHOhg3blziZ/bs2dL9qBKaHQceeKAomVH0YtXCCuaZUo4VDIWz198Eo0ePFovU/fffH3hzfHDaaadJnaqE9lMe+a9fP/nJT4ILL7xQ/8ov1iivGwo8IxLLlx70TCXw0lbgTeGBZyaBl8IClONeLxN4qUmKoRCnH36qGTz55JOBZ0ZBz549A6+f0mpEAY8lzut/ZJ+f4gVesgpmzJgRfPPNN2IJo19eDxWe4xlecMkll4T/bSM7BMwKlh2WNVuTMiD/DhMrUNKvWoLiDIiHErP6GmusIdYv74cjVqLoQ+2XegRecSvmbOr2OiIxZ3vfG8GkGAaEtYo61LIVBfXZZ58VaxTHYYK4C1x99dXRIoFfUhJgodMxYoljn9KJJ54o/fT6KNnlp2fBr371K2Fk1IlZ/5RTTtHi8msMKAeOTP/8gNr8xTIyBFoggO4HRTROiKqLodBee+0lyuPJkyfnnINDIYpbL1GE052cAhn9YW3bt99+67ypPG+N6H0883QolJlGRunrr7+WaZj3Zwp3sw/LG1NAo7ZDwHRAbYd13bWEvgfv4bPOOiu0VqFLgfEkrSnDqsUDHH/gsx44iu/WmA/tYXHDcpXUF3RHUeZDefYZ8wGJtiWTgNoW77pr7bLLLnPnnnuuKJPx20GyYDnGpZdeWndjsQ7XHgLGgGrvmtRcj7AaPf/8846pD5YxzN1GhkAWCBgDygJFq8MQMARKQsB0QCXBZicZAoZAFggYA8oCRavDEDAESkLAGFBJsNlJhoAhkAUCxoCyQNHqMAQMgZIQMAZUEmx2kiFgCGSBgDGgLFC0OgwBQ6AkBIwBlQSbnWQIGAJZIGAMKAsUrQ5DwBAoCQFjQCXBZicZAoZAFggYA8oCRavDEDAESkLAGFBJsNlJhoAhkAUCxoCyQNHqMAQMgZIQMAZUEmx2kiFgCGSBgDGgLFC0OgwBQ6AkBIwBlQSbnWQIGAJZIGAMKAsUrQ5DwBAoCQFjQCXBZicZAoZAFggYA8oCRavDEDAESkLAGFBJsNlJhoAhkAUC/w+udPA4yMrdOgAAAABJRU5ErkJggg==" width="50%" style="display: block; margin: auto;" /></p>
-<p>Moreover, <code>lmFilter()</code> also allows users to select eigenvectors based on alternative selection criteria:</p>
+<p>Moreover, <code>lmFilter()</code> also allows users to select
+eigenvectors based on alternative selection criteria:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Alternative selection criteria:</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># maximization of model fit</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lmFilter</span>(<span class="at">y =</span> y, <span class="at">x =</span> X, <span class="at">W =</span> W, <span class="at">objfn =</span> <span class="st">&#39;R2&#39;</span>, <span class="at">positive =</span> <span class="cn">TRUE</span>, <span class="at">ideal.setsize =</span> <span class="cn">TRUE</span>)</span>
@@ -519,12 +581,31 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># all eigenvectors in the candidate set</span></span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lmFilter</span>(<span class="at">y =</span> y, <span class="at">x =</span> X, <span class="at">W =</span> W, <span class="at">objfn =</span> <span class="st">&#39;all&#39;</span>, <span class="at">positive =</span> <span class="cn">TRUE</span>, <span class="at">ideal.setsize =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 22 out of 22 candidate eigenvectors selected</span></span></code></pre></div>
-<p>If users wish to select eigenvectors based on individual selection criteria, they can obtain the eigenvectors using the function <code>getEVs()</code> and perform a supervised selection procedure using the basic <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm"><code>stats::lm()</code></a> command.</p>
+<p>If users wish to select eigenvectors based on individual selection
+criteria, they can obtain the eigenvectors using the function
+<code>getEVs()</code> and perform a supervised selection procedure using
+the basic <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm"><code>stats::lm()</code></a>
+command.</p>
 </div>
 <div id="extension-to-generalized-linear-models" class="section level3">
 <h3>Extension to Generalized Linear Models</h3>
-<p>The ESF approach outlined above easily extends to generalized linear models (GLMs) as well <span class="citation">(see also Griffith, Chun, and Li 2019)</span>. Therefore, the <code>spfilteR</code> package contains the function <code>glmFilter()</code> which uses maximum likelihood estimation (MLE) to fit a spatially filtered GLM and performs an unsupervised eigenvector search based on alternative objective functions.</p>
-<p>Except for minor differences, <code>glmFilter()</code> works similar to the <code>lmFilter()</code> function discussed above. The option <code>model</code> defines the model that needs to be estimated. Currently, unsupervised spatial filtering is possible for logit, probit, and poisson models. Moreover, the option <code>optim.method</code> specifies the optimization method used to maximize the log-likelihood function. Finally, <code>resid.type</code> allows users to define the type of residuals used to calculate Moran’s <em>I</em> and <code>boot.MI</code> is an integer specifying the number of bootstrap permutations to obtain the variance of Moran’s <em>I</em>.</p>
+<p>The ESF approach outlined above easily extends to generalized linear
+models (GLMs) as well <span class="citation">(see also Griffith, Chun,
+and Li 2019)</span>. Therefore, the <code>spfilteR</code> package
+contains the function <code>glmFilter()</code> which uses maximum
+likelihood estimation (MLE) to fit a spatially filtered GLM and performs
+an unsupervised eigenvector search based on alternative objective
+functions.</p>
+<p>Except for minor differences, <code>glmFilter()</code> works similar
+to the <code>lmFilter()</code> function discussed above. The option
+<code>model</code> defines the model that needs to be estimated.
+Currently, unsupervised spatial filtering is possible for logit, probit,
+and poisson models. Moreover, the option <code>optim.method</code>
+specifies the optimization method used to maximize the log-likelihood
+function. Finally, <code>resid.type</code> allows users to define the
+type of residuals used to calculate Moran’s <em>I</em> and
+<code>boot.MI</code> is an integer specifying the number of bootstrap
+permutations to obtain the variance of Moran’s <em>I</em>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define outcome variables</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y.bin <span class="ot">&lt;-</span> fakedataset<span class="sc">$</span>indicator</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>y.count <span class="ot">&lt;-</span> fakedataset<span class="sc">$</span>count</span>
@@ -548,29 +629,46 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                          <span class="at">optim.method =</span> <span class="st">&#39;BFGS&#39;</span>, <span class="at">positive =</span> <span class="cn">TRUE</span>, <span class="at">ideal.setsize =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                          <span class="at">alpha =</span> .<span class="dv">25</span>, <span class="at">resid.type =</span> <span class="st">&#39;deviance&#39;</span>, <span class="at">boot.MI =</span> <span class="dv">100</span>))</span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7 out of 31 candidate eigenvectors selected</span></span></code></pre></div>
-<p>Again, if users wish to define individual selection criteria or fit a GLM currently not implemented in <code>glmFilter()</code>, they can obtain the eigenvectors using the <code>getEVs()</code> command and perform supervised eigenvector selection using the standard <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/glm"><code>stats::glm()</code></a> function.</p>
+<p>Again, if users wish to define individual selection criteria or fit a
+GLM currently not implemented in <code>glmFilter()</code>, they can
+obtain the eigenvectors using the <code>getEVs()</code> command and
+perform supervised eigenvector selection using the standard <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/glm"><code>stats::glm()</code></a>
+function.</p>
 </div>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-cliff1972" class="csl-entry">
-Cliff, Andrew D, and John K. Ord. 1972. <span>“Testing for Spatial Autocorrelation Among Regression Residuals.”</span> <em>Geographical Analysis</em> 4 (3): 267–84. <a href="https://doi.org/10.1111/j.1538-4632.1972.tb00475.x">https://doi.org/10.1111/j.1538-4632.1972.tb00475.x</a>.
+Cliff, Andrew D, and John K. Ord. 1972. <span>“Testing for Spatial
+Autocorrelation Among Regression Residuals.”</span> <em>Geographical
+Analysis</em> 4 (3): 267–84. <a href="https://doi.org/10.1111/j.1538-4632.1972.tb00475.x">https://doi.org/10.1111/j.1538-4632.1972.tb00475.x</a>.
 </div>
 <div id="ref-cliff1981" class="csl-entry">
-———. 1981. <em>Spatial Processes: Models &amp; Applications</em>. Advances in Spatial Science. London: Pion.
+———. 1981. <em>Spatial Processes: Models &amp; Applications</em>.
+Advances in Spatial Science. London: Pion.
 </div>
 <div id="ref-dary2011" class="csl-entry">
-Dray, Stéphane. 2011. <span>“A New Perspective about Moran’s Coefficient: Spatial Autocorrelation as a Linear Regression Problem.”</span> <em>Geographical Analysis</em> 43 (2): 127–41. <a href="https://doi.org/10.1111/j.1538-4632.2011.00811.x">https://doi.org/10.1111/j.1538-4632.2011.00811.x</a>.
+Dray, Stéphane. 2011. <span>“A New Perspective about Moran’s
+Coefficient: Spatial Autocorrelation as a Linear Regression
+Problem.”</span> <em>Geographical Analysis</em> 43 (2): 127–41. <a href="https://doi.org/10.1111/j.1538-4632.2011.00811.x">https://doi.org/10.1111/j.1538-4632.2011.00811.x</a>.
 </div>
 <div id="ref-griffith2003" class="csl-entry">
-Griffith, Daniel A. 2003. <em>Spatial Autocorrelation and Spatial Filtering: Gaining Understanding Through Theory and Scientific Visualization</em>. Advances in Spatial Science. Berlin, Heidelberg: Springer. <a href="https://doi.org/10.1007/978-3-540-24806-4">https://doi.org/10.1007/978-3-540-24806-4</a>.
+Griffith, Daniel A. 2003. <em>Spatial Autocorrelation and Spatial
+Filtering: Gaining Understanding Through Theory and Scientific
+Visualization</em>. Advances in Spatial Science. Berlin, Heidelberg:
+Springer. <a href="https://doi.org/10.1007/978-3-540-24806-4">https://doi.org/10.1007/978-3-540-24806-4</a>.
 </div>
 <div id="ref-griffith2019" class="csl-entry">
-Griffith, Daniel A., Yongwan Chun, and Bin Li. 2019. <em>Spatial Regression Analysis Using Eigenvector Spatial Filtering</em>. Spatial Econometrics and Spatial Statistics. London: Elsevier. <a href="https://doi.org/10.1016/B978-0-12-815043-6.09990-0">https://doi.org/10.1016/B978-0-12-815043-6.09990-0</a>.
+Griffith, Daniel A., Yongwan Chun, and Bin Li. 2019. <em>Spatial
+Regression Analysis Using Eigenvector Spatial Filtering</em>. Spatial
+Econometrics and Spatial Statistics. London: Elsevier. <a href="https://doi.org/10.1016/B978-0-12-815043-6.09990-0">https://doi.org/10.1016/B978-0-12-815043-6.09990-0</a>.
 </div>
 <div id="ref-tiefelsdorf2007" class="csl-entry">
-Tiefelsdorf, Michael, and Daniel A Griffith. 2007. <span>“Semiparametric Filtering of Spatial Autocorrelation: The Eigenvector Approach.”</span> <em>Environment and Planning A: Economy and Space</em> 39 (5): 1193–1221. <a href="https://doi.org/10.1068/a37378">https://doi.org/10.1068/a37378</a>.
+Tiefelsdorf, Michael, and Daniel A Griffith. 2007. <span>“Semiparametric
+Filtering of Spatial Autocorrelation: The Eigenvector Approach.”</span>
+<em>Environment and Planning A: Economy and Space</em> 39 (5):
+1193–1221. <a href="https://doi.org/10.1068/a37378">https://doi.org/10.1068/a37378</a>.
 </div>
 </div>
 </div>
