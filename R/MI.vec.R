@@ -11,7 +11,8 @@
 #' @param alternative specification of alternative hypothesis as 'greater' (default),
 #' 'lower', or 'two.sided'
 #' @param symmetrize symmetrizes the connectivity matrix \emph{\strong{W}}
-#' by: 1/2 * (\emph{\strong{W}} + \emph{\strong{W}}') (TRUE/ FALSE).
+#' by: 1/2 * (\emph{\strong{W}} + \emph{\strong{W}}') (TRUE/ FALSE)
+#' @param na.rm listwise deletion of observations with missing values (TRUE/ FALSE)
 #'
 #' @return Returns an object of class \code{data.frame} that contains the
 #' following information for each variable:
@@ -30,7 +31,7 @@
 #' follows Cliff and Ord (1981), see also Upton and Fingleton (1985).
 #' It assumes the connectivity matrix \emph{\strong{W}} to be symmetric.
 #' For inherently non-symmetric matrices, it is recommended to specify
-#' \code{symmetrize=TRUE}.
+#' \code{symmetrize = TRUE}.
 #'
 #' @author Sebastian Juhl
 #'
@@ -56,11 +57,20 @@
 #'
 #' @export
 
-MI.vec <- function(x, W, alternative = "greater", symmetrize = TRUE) {
+MI.vec <- function(x, W, alternative = "greater", symmetrize = TRUE, na.rm = TRUE) {
+
   # convert x to a matrix and save names (if provided)
-  x <- as.matrix(x)
+  x <- data.matrix(x)
   if (!is.null(colnames(x))) {
     nams <- colnames(x)
+  }
+  x <- unname(x)
+
+  # missing values
+  if (na.rm) {
+    miss <- apply(x, 1, anyNA)
+    x <- data.matrix(x[!miss,])
+    W <- W[!miss, !miss]
   }
 
   #####
@@ -120,7 +130,7 @@ MI.vec <- function(x, W, alternative = "greater", symmetrize = TRUE) {
     out[i, "pI"] <- pfunc(z = out[i, "zI"], alternative = alternative)
     out[i, 6] <- star(p = out[i, "pI"])
   }
-  if (!is.null(colnames(x))) {
+  if (exists('nams')) {
     rownames(out) <- nams
   }
 

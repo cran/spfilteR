@@ -9,6 +9,7 @@
 #' @param x a vector or matrix
 #' @param W spatial connectivity matrix
 #' @param nsim number of iterations to simulate the null distribution
+#' @param na.rm listwise deletion of observations with missing values (TRUE/ FALSE)
 #'
 #' @return Returns a \code{data.frame} that contains the following information
 #' for each variable:
@@ -53,12 +54,20 @@
 #'
 #' @export
 
-MI.decomp <- function(x, W, nsim = 100) {
+MI.decomp <- function(x, W, nsim = 100, na.rm = TRUE) {
 
   # convert x to a matrix and save names (if provided)
-  x <- as.matrix(x)
+  x <- data.matrix(x)
   if (!is.null(colnames(x))) {
     nams <- colnames(x)
+  }
+  x <- unname(x)
+
+  # missing values
+  if (na.rm) {
+    miss <- apply(x, 1, anyNA)
+    x <- data.matrix(x[!miss,])
+    W <- W[!miss, !miss]
   }
 
   #####
@@ -128,7 +137,7 @@ MI.decomp <- function(x, W, nsim = 100) {
     out[i, 8] <- star(p = out[i, "pI-"])
     out[i, 10] <- star(p = out[i, "pItwo.sided"])
   }
-  if (!is.null(colnames(x))) {
+  if (exists('nams')) {
     rownames(out) <- nams
   }
 
