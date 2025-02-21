@@ -102,3 +102,8 @@ y.count <- fakedataset$count
                           optim.method = 'BFGS', positive = TRUE, ideal.setsize = FALSE,
                           alpha = .25, resid.type = 'deviance', boot.MI = 100))
 
+# ESF negative binomial model
+(poisson.esf <- glmFilter(y = y.count, x = NULL, W = W, objfn = 'BIC', model = 'nb',
+                          optim.method = 'BFGS', positive = TRUE, ideal.setsize = FALSE,
+                          alpha = .25, resid.type = 'deviance', boot.MI = 100))
+

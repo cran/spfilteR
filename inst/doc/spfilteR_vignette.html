@@ -473,15 +473,15 @@ permutation procedure to assess the significance <span class="citation">(Dray 20
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># decompose Moran&#39;s I</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>(I.dec <span class="ot">&lt;-</span> <span class="fu">MI.decomp</span>(<span class="at">x =</span> cont, <span class="at">W =</span> W, <span class="at">nsim=</span><span class="dv">100</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;                 I+       VarI+        pI+            I-       VarI-        pI-</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; x1       0.3894789 0.001972180 0.00990099 ** -0.0783007 0.002075120 1.00000000</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; x2       0.3048369 0.002286622 0.04950495  * -0.1360794 0.002466173 0.99009901</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; x3       0.2247566 0.001732302 0.30693069    -0.2156438 0.001835932 0.48514851</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; negative 0.1131614 0.002063561 0.99009901    -0.3572259 0.001763759 0.00990099</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;             pItwo.sided  </span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; x1           0.01980198 *</span></span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; x2           0.09900990 .</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; x3           0.61386139  </span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; negative **  0.01980198 *</span></span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; x1       0.3894789 0.001757946 0.00990099 ** -0.0783007 0.002055672 1.00000000</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; x2       0.3048369 0.001816208 0.02970297  * -0.1360794 0.001825816 0.99009901</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; x3       0.2247566 0.002026051 0.25742574    -0.2156438 0.002566824 0.50495050</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; negative 0.1131614 0.002063477 1.00000000    -0.3572259 0.001791260 0.01980198</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt;            pItwo.sided  </span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; x1          0.01980198 *</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; x2          0.05940594 .</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; x3          0.51485149  </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; negative *  0.03960396 *</span></span></code></pre></div>
 <p>spfilteR_vignette.R</p>
 <p>Note that the global Moran’s <em>I</em> is the sum of <code>I+</code>
 and <code>I-</code>:</p>
@@ -616,12 +616,13 @@ functions.</p>
 to the <code>lmFilter()</code> function discussed above. The option
 <code>model</code> defines the model that needs to be estimated.
 Currently, unsupervised spatial filtering is possible for logit, probit,
-and poisson models. Moreover, the option <code>optim.method</code>
-specifies the optimization method used to maximize the log-likelihood
-function. Finally, <code>resid.type</code> allows users to define the
-type of residuals used to calculate Moran’s <em>I</em> and
-<code>boot.MI</code> is an integer specifying the number of bootstrap
-permutations to obtain the variance of Moran’s <em>I</em>.</p>
+poisson, and negative binomial models. Moreover, the option
+<code>optim.method</code> specifies the optimization method used to
+maximize the log-likelihood function. Finally, <code>resid.type</code>
+allows users to define the type of residuals used to calculate Moran’s
+<em>I</em> and <code>boot.MI</code> is an integer specifying the number
+of bootstrap permutations to obtain the variance of Moran’s
+<em>I</em>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># define outcome variables</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>y.bin <span class="ot">&lt;-</span> fakedataset<span class="sc">$</span>indicator</span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>y.count <span class="ot">&lt;-</span> fakedataset<span class="sc">$</span>count</span>
@@ -644,7 +645,14 @@ permutations to obtain the variance of Moran’s <em>I</em>.</p>
 <span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>(poisson.esf <span class="ot">&lt;-</span> <span class="fu">glmFilter</span>(<span class="at">y =</span> y.count, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">W =</span> W, <span class="at">objfn =</span> <span class="st">&#39;BIC&#39;</span>, <span class="at">model =</span> <span class="st">&#39;poisson&#39;</span>,</span>
 <span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>                          <span class="at">optim.method =</span> <span class="st">&#39;BFGS&#39;</span>, <span class="at">positive =</span> <span class="cn">TRUE</span>, <span class="at">ideal.setsize =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a>                          <span class="at">alpha =</span> .<span class="dv">25</span>, <span class="at">resid.type =</span> <span class="st">&#39;deviance&#39;</span>, <span class="at">boot.MI =</span> <span class="dv">100</span>))</span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; 9 out of 31 candidate eigenvectors selected</span></span></code></pre></div>
+<span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt; 9 out of 31 candidate eigenvectors selected</span></span>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co"># ESF negative binomial model</span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a>(poisson.esf <span class="ot">&lt;-</span> <span class="fu">glmFilter</span>(<span class="at">y =</span> y.count, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">W =</span> W, <span class="at">objfn =</span> <span class="st">&#39;BIC&#39;</span>, <span class="at">model =</span> <span class="st">&#39;nb&#39;</span>,</span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a>                          <span class="at">optim.method =</span> <span class="st">&#39;BFGS&#39;</span>, <span class="at">positive =</span> <span class="cn">TRUE</span>, <span class="at">ideal.setsize =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-28"><a href="#cb11-28" tabindex="-1"></a>                          <span class="at">alpha =</span> .<span class="dv">25</span>, <span class="at">resid.type =</span> <span class="st">&#39;deviance&#39;</span>, <span class="at">boot.MI =</span> <span class="dv">100</span>))</span>
+<span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a><span class="co">#&gt; For negative binomial models, only &#39;raw&#39; and &#39;pearson&#39; residuals currently available. Set to &#39;pearson&#39;</span></span>
+<span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a><span class="co">#&gt; 0 out of 31 candidate eigenvectors selected</span></span></code></pre></div>
 <p>spfilteR_vignette.R</p>
 <p>Again, if users wish to define individual selection criteria or fit a
 GLM currently not implemented in <code>glmFilter()</code>, they can
